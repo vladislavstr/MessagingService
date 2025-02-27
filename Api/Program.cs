@@ -1,6 +1,9 @@
 using Api.Configures;
 using Api.Extensions;
+using Microsoft.OpenApi.Models;
+using Scalar.AspNetCore;
 using Serilog;
+using System.Reflection;
 
 try
 {
@@ -18,16 +21,58 @@ try
     #endregion
 
     builder.Services.AddControllers();
-    // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-    builder.Services.AddOpenApi();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen(c =>
+    {
+        // Swagger configuration
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "MessagingService Api", Version = "v1" });
+
+        // Search for the generated documentation file and add comments to the swager specification
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+        c.IncludeXmlComments(xmlPath);
+    });
 
     var app = builder.Build();
 
-    // Configure the HTTP request pipeline.
+    #region Pipelines
+    #region Scalar
     if (app.Environment.IsDevelopment())
     {
-        app.MapOpenApi();
+        // Specification
+        app.UseSwagger(options =>
+        {
+            options.RouteTemplate = "openapi/{documentName}.json";
+        });
+
+        // UI
+        app.MapScalarApiReference(options =>
+        {
+            options.Title = "MessagingService";
+            options.Theme = ScalarTheme.Mars;
+            options.ShowSidebar = true;
+            options.DefaultHttpClient = new(ScalarTarget.CSharp, ScalarClient.HttpClient);
+        });
     }
+    #endregion
+
+    #region Swagger
+    else
+    {
+        // Specification
+        app.UseSwagger(options =>
+        {
+            options.RouteTemplate = "swagger/{documentName}/swagger.json";
+        });
+
+        // UI
+        app.UseSwaggerUI(c =>
+        {
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "MessagingService Api v1");
+        });
+    }
+    #endregion
+    #endregion
 
     app.UseHttpsRedirection();
 
