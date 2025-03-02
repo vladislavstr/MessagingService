@@ -5,7 +5,7 @@ using Domain.Models.Handlers.Commands.Message;
 using Serilog;
 
 namespace Application.Handlers.Commands
-{   
+{
     public class CreateMessageCommandHandler
         (
             IMessageProvider messageProvider,

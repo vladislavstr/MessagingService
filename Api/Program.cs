@@ -1,5 +1,9 @@
 using Api.Configures;
 using Api.Extensions;
+using Application.Common.Behaviors;
+using Application.Handlers.Commands.Base;
+using Domain.Models.Handlers.Commands.Base;
+using MediatR;
 using Microsoft.OpenApi.Models;
 using Scalar.AspNetCore;
 using Serilog;
@@ -32,6 +36,31 @@ try
         var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
         c.IncludeXmlComments(xmlPath);
     });
+
+    #region Configures
+    builder.Services.AddMapperConfigure();
+    builder.Services.AddValidatorsConfigure();
+    builder.Services.AddInfrastructureConfigure();
+
+    #region MediatR
+    var assembly = Assembly.GetExecutingAssembly();
+    builder.Services.AddMediatR
+        (
+            cfg =>
+            {
+                cfg.RegisterServicesFromAssemblies
+                (
+                    assembly,
+                    typeof(BaseCommand).Assembly,
+                    typeof(BaseCommandHandler<>).Assembly
+                );
+
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(UnhandledExceptionBehavior<,>));
+                cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            }
+        );
+    #endregion
+    #endregion
 
     var app = builder.Build();
 

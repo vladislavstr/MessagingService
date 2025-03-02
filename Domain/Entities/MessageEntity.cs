@@ -21,6 +21,6 @@ namespace Domain.Entities
         /// Time of sending by the user
         /// </summary>
         [Description("Time of sending by the user")]
-        public required DateTimeOffset SentAt { get; set; } 
+        public required DateTimeOffset SentAt { get; set; }
     }
 }
