@@ -8,5 +8,6 @@
                                               SavedAt TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                               SentAt TIMESTAMP WITH TIME ZONE NOT NULL
                                             );";
+        public static string CheckAccessRights = @"\dn+;";
     }
 }

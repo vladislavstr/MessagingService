@@ -9,7 +9,7 @@ namespace Application.Providers
     {
         private readonly ILogger _logger = Log.ForContext<MessageProvider>();
 
-        public int AddMessage(MessageModel patient, bool isContinuation = false)
+        public int AddMessage(MessageModel message, bool isContinuation = false)
         {
             throw new NotImplementedException();
         }
