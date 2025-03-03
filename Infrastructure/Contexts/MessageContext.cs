@@ -1,31 +1,26 @@
-﻿using Domain.Entities;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Npgsql;
+using Serilog;
 
 namespace Infrastructure.Contexts
 {
     public class MessageContext
     {
         private readonly string _connectionString;
-        private readonly IConfiguration _configuration;
+        private readonly ILogger _logger;
 
-        public MessageContext(IConfiguration configuration)
+        public MessageContext(IConfiguration configuration, ILogger logger)
         {
+            _logger = Log.ForContext<MessageContext>();
             _connectionString = configuration.GetSection("ConnectionStrings:PG").Value;
         }
 
-        public static void InitializeDatabase(string connectionString)
+        public void InitializeDatabase()
         {
-            using var connection = new NpgsqlConnection(connectionString);
+            using var connection = new NpgsqlConnection(connectionString: _connectionString);
             connection.Open();
 
-            var command = new NpgsqlCommand(@"
-                                                CREATE TABLE IF NOT EXISTS messages (
-                                                Id SERIAL PRIMARY KEY,
-                                                Content VARCHAR(128) NOT NULL,
-                                                SavedAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                                SentAt TIMESTAMP WITH TIME ZONE NOT NULL);
-                                             ", connection);
+            var command = new NpgsqlCommand(CmdText.CreateTable, connection);
 
             command.ExecuteNonQuery();
         }
