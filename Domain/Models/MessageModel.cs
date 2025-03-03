@@ -14,7 +14,7 @@ namespace Domain.Models
         /// Time of writing to the database
         /// </summary>
         [Description("Time of writing to the database")]
-        public DateTimeOffset SavedAt { get; set; } = DateTime.UtcNow;
+        public DateTimeOffset SavedAt { get; set; } = DateTimeOffset.UtcNow;
 
         /// <summary>
         /// Time of sending by the user
