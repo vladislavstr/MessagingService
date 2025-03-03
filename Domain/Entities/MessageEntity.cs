@@ -15,7 +15,7 @@ namespace Domain.Entities
         /// Time of writing to the database
         /// </summary>
         [Description("Time of writing to the database")]
-        public DateTime SavedAt { get; set; } = DateTime.UtcNow;
+        public DateTime SavedAt { get; set; }
 
         /// <summary>
         /// Time of sending by the user
