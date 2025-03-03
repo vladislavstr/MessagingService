@@ -4,6 +4,6 @@ namespace Application.Providers.Interfaces
 {
     public interface IMessageProvider
     {
-        int AddMessage(MessageModel patient, bool isContinuation = false);
+        int AddMessage(MessageModel message, bool isContinuation = false);
     }
 }
