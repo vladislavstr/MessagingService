@@ -52,25 +52,22 @@ namespace Desktop
 
         private HubConnection GetHubConnection()
         {
-            string url = "http://localhost:7054/messages";
+            string url = "http://localhost:7054/chat";
 
             HubConnection result = new HubConnectionBuilder()
-                .WithUrl(url) // адрес сервера
-                .WithAutomaticReconnect() // автоматическое переподключение при потере соединения
-                .Build(); // возвращает экземпляр HubConnectionBuilder
+                .WithUrl(url)
+                .WithAutomaticReconnect()
+                .Build();
 
-            // Обработчик события Send
             result.On<MessageDto>("Send", message =>
             {
                 AppendTextToChat(message, Colors.Yellow);
             });
 
-            // Подписка на событие цыкла подключения: закрытие
             result.Closed += error =>
             {
                 try
                 {
-                    // Если ошибке происходит не по ошибке, то error = null
                     MainThread.BeginInvokeOnMainThread(async () =>
                     {
                         string errorMessage = error != null ? error.Message : "Connection closed normally.";
@@ -85,14 +82,12 @@ namespace Desktop
                 return Task.CompletedTask;
             };
 
-            // Подписка на событие цыкла подключения: успешное переподключение
             result.Reconnected += id =>
             {
                 DisplayAlert("Reconnected", "Connection reconnected with id: {id}", id, "OK");
                 return Task.CompletedTask;
             };
 
-            // Подписка на событие цыкла подключения: попытки переподключения
             result.Reconnecting += error =>
             {
                 DisplayAlert("Reconnected", "Connection reconnecting with error message: {Message}", error.Message, "OK");
