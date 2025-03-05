@@ -2,9 +2,9 @@
 
 namespace Domain.Models.Handlers.Commands.Message
 {
-    public sealed record CreateMessageCommand
-    (
-        string Content,
-        DateTimeOffset SentAt
-    ) : BaseCommand<string>;
+    public sealed record CreateMessageCommand : BaseCommand<string>
+    {
+        public string Content { get; init; }
+        public DateTimeOffset SentAt { get; init; } = DateTimeOffset.UtcNow;
+    }
 }
