@@ -2,6 +2,7 @@
 using Application.Providers.Interfaces;
 using Domain.Mappers.Message;
 using Domain.Models.Handlers.Commands.Message;
+using Npgsql;
 using Serilog;
 
 namespace Application.Handlers.Commands
@@ -9,18 +10,22 @@ namespace Application.Handlers.Commands
     public class CreateMessageCommandHandler
         (
             IMessageProvider messageProvider,
-            IMessageMapper messageMapper
+            IMessageMapper messageMapper,
+            IDataBaseProvider dataBaseProvider
         ) : BaseCommandHandler<CreateMessageCommand, string>
     {
         private readonly ILogger _logger = Log.ForContext<CreateMessageCommandHandler>();
 
-        public override Task<string> Handle(CreateMessageCommand request, CancellationToken cancellationToken = default)
+        public override async Task<string> Handle(CreateMessageCommand request, CancellationToken cancellationToken = default)
         {
             _logger.Information("The message has been created: {Request}", request);
-            var message = messageMapper.ToModel(request);
-            messageProvider.AddMessage(message);
 
-            return Task.FromResult($"The message is recorded: {message.Id}");
+            int messageNumber = await dataBaseProvider.ExecuteNonQueryAsync(
+               "INSERT INTO messages (content, sentat ) VALUES (@content  ,@sentat) RETURNING id",
+               new NpgsqlParameter("content", request.Content),
+               new NpgsqlParameter("sentat", request.SentAt));
+
+            return await Task.FromResult($"The message is recorded: {messageNumber}");
         }
     }
 }

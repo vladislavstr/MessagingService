@@ -8,6 +8,7 @@ namespace Api.Configures
         public static IServiceCollection AddInfrastructureConfigure(this IServiceCollection services)
         {
             services.AddSingleton<IMessageProvider, MessageProvider>();
+            services.AddSingleton<IDataBaseProvider, DataBaseProvider>();
 
             return services;
         }

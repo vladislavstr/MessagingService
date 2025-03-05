@@ -17,7 +17,7 @@ namespace Api.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("create-message")]
-        public async Task<IActionResult> RemovePatient
+        public async Task<IActionResult> CreateMessage
             (
                 CreateMessageCommand createMessageCommand,
                 CancellationToken cancellationToken = default
