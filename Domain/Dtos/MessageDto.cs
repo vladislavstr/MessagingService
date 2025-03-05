@@ -17,9 +17,9 @@ namespace Domain.Dtos
         public required string Content { get; set; }
 
         /// <summary>
-        /// Time of sending by the user
+        /// Time of writing to the database
         /// </summary>
-        [Description("Time of sending by the user")]
-        public required DateTimeOffset SentAt { get; set; }
+        [Description("Time of writing to the database")]
+        public required DateTimeOffset SavedAt { get; set; }
     }
 }

@@ -42,7 +42,7 @@ namespace Desktop
             {
                 var messageLabel = new Label
                 {
-                    Text = $"Id: {message.Id}\nDate: {message.SentAt}\nContent: {message.Content}\n",
+                    Text = $"Id: {message.Id}\nDate: {message.SavedAt}\nContent: {message.Content}\n",
                     TextColor = color
                 };
 
