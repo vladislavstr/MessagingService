@@ -1,10 +1,15 @@
-﻿using Domain.Entities.Base;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
-namespace Domain.Entities
+namespace Desktop.Dto
 {
-    public class MessageEntity : BaseEntity
+    internal class MessageDto
     {
+        /// <summary>
+        /// Message id
+        /// </summary>
+        [Description("Message id")]
+        public int Id { get; set; }
+
         /// <summary>
         /// Message content
         /// </summary>

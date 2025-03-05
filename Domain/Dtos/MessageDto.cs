@@ -1,9 +1,15 @@
 ﻿using System.ComponentModel;
 
-namespace Domain.Models
+namespace Domain.Dtos
 {
-    public class MessageModel
+    public class MessageDto
     {
+        /// <summary>
+        /// Message id
+        /// </summary>
+        [Description("Message id")]
+        public int Id { get; set; }
+
         /// <summary>
         /// Message content
         /// </summary>
@@ -14,12 +20,6 @@ namespace Domain.Models
         /// Time of writing to the database
         /// </summary>
         [Description("Time of writing to the database")]
-        public DateTimeOffset SavedAt { get; set; } = DateTimeOffset.UtcNow;
-
-        /// <summary>
-        /// Time of sending by the user
-        /// </summary>
-        [Description("Time of sending by the user")]
-        public required DateTimeOffset SentAt { get; set; }
+        public required DateTimeOffset SavedAt { get; set; }
     }
 }
