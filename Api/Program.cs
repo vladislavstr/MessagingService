@@ -1,4 +1,5 @@
 using Api.Configures;
+using Api.Configures.Hub;
 using Api.Extensions;
 using Application.Common.Behaviors;
 using Application.Handlers.Commands.Base;
@@ -41,6 +42,7 @@ try
     builder.Services.AddMapperConfigure();
     builder.Services.AddValidatorsConfigure();
     builder.Services.AddInfrastructureConfigure();
+    builder.Services.AddSignalR();
 
     #region MediatR
     var assembly = Assembly.GetExecutingAssembly();
@@ -101,6 +103,10 @@ try
         });
     }
     #endregion
+    #endregion
+
+    #region Hub
+    app.MapHub<MessageHub>("/chat");
     #endregion
 
     app.UseHttpsRedirection();
