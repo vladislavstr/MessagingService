@@ -1,9 +1,9 @@
-﻿using Domain.Models;
+﻿using Domain.Dtos;
 
 namespace Application.Providers.Interfaces
 {
     public interface IMessageProvider
     {
-        int AddMessage(MessageModel message, bool isContinuation = false);
+        Task AddMessage(MessageDto message, bool isContinuation = false);
     }
 }

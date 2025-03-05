@@ -1,4 +1,5 @@
 ﻿using Application.Providers.Interfaces;
+using Domain.Entities;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Serilog;
@@ -17,25 +18,27 @@ namespace Application.Providers
         /// <param name="parameters"></param>
         /// <returns>Message value</returns>
         //ToDo: go to generic 
-        public async Task<int> ExecuteNonQueryAsync(string sql, params NpgsqlParameter[] parameters)
+        public async Task<MessageEntity> ExecuteNonQueryAsync(string sql, params NpgsqlParameter[] parameters)
         {
-            try
+            await using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            await using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddRange(parameters);
+
+            var reader = await command.ExecuteReaderAsync();
+            if (await reader.ReadAsync())
             {
-                await using var connection = new NpgsqlConnection(_connectionString);
-                await connection.OpenAsync();
-
-                await using var command = new NpgsqlCommand(sql, connection);
-                command.Parameters.AddRange(parameters);
-
-                var result = await command.ExecuteScalarAsync();
-                return Convert.ToInt32(result);
-
+                return new MessageEntity
+                {
+                    Id = reader.GetInt32(0),
+                    Content = reader.GetString(1),
+                    SavedAt = reader.GetDateTime(2)
+                };
             }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, ex.Message);
-                return 0;
-            }
+
+            _logger.Error("Error saving the message with sql: {Sql}\n param: {}", sql, parameters);
+            throw new Exception("Try again later");
         }
     }
 }
