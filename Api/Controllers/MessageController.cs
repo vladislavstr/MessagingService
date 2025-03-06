@@ -1,5 +1,6 @@
 ﻿using Api.Controllers.Base;
 using Domain.Models.Handlers.Commands.Message;
+using Domain.Models.Handlers.Queries.Message;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -22,5 +23,17 @@ namespace Api.Controllers
                 CreateMessageCommand createMessageCommand,
                 CancellationToken cancellationToken = default
             ) => await Action(createMessageCommand, cancellationToken);
+
+        /// <summary>
+        /// Get messages for last 10 minutes
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("list")]
+        public async Task<IActionResult> GetMessages
+            (
+                CancellationToken cancellationToken = default
+            ) => await Action(new GetMessageQuery(), cancellationToken);
     }
 }
