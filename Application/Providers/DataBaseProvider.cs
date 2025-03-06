@@ -37,8 +37,37 @@ namespace Application.Providers
                 };
             }
 
-            _logger.Error("Error saving the message with sql: {Sql}\n param: {}", sql, parameters);
+            _logger.Error("Error saving the message with sql: {Sql}\n parameters: {Parameters}", sql, parameters);
             throw new Exception("Try again later");
+        }
+
+        /// <summary>
+        /// The list of messages from the last 10 minutes
+        /// </summary>
+        /// <returns></returns>
+        public async Task<IEnumerable<MessageEntity>> GetMessagesAsync()
+        {
+            await using var connection = new NpgsqlConnection(_connectionString);
+            await connection.OpenAsync();
+
+            var messages = new List<MessageEntity>();
+
+            const string sql = "SELECT id, content, savedat FROM messages WHERE savedat >= NOW() - INTERVAL '10 minutes'";
+            await using var command = new NpgsqlCommand(sql, connection);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                messages.Add(new MessageEntity
+                {
+                    Id = reader.GetInt32(0),
+                    Content = reader.GetString(1),
+                    SavedAt = reader.GetDateTime(2)
+                });
+            }
+
+            _logger.Error("Error saving the message with sql: {Sql}", sql);
+            return messages;
         }
     }
 }
