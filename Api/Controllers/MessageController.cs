@@ -24,6 +24,11 @@ namespace Api.Controllers
                 CancellationToken cancellationToken = default
             ) => await Action(createMessageCommand, cancellationToken);
 
+        /// <summary>
+        /// Get messages for last 10 minutes
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("list")]
         public async Task<IActionResult> GetMessages
