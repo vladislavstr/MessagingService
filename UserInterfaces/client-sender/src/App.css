@@ -57,6 +57,7 @@ h1 {
 
 .form-group {
   margin-bottom: 1rem;
+  display: flex;
 }
 
 textarea {

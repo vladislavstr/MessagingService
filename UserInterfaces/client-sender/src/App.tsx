@@ -23,7 +23,7 @@ function App() {
     e.preventDefault();
     
     try {
-      console.log('Отправляемые данные:', {
+      console.log('Sending data:', {
         content: message.content,
         sentAt: getCurrentUtcTime()
       });
@@ -48,28 +48,28 @@ function App() {
         });
       } else {
         const errorData = await response.text();
-        console.error('Ошибка сервера:', errorData);
-        alert('Ошибка при отправке сообщения');
+        console.error('Server error:', errorData);
+        alert('Error sending message');
       }
     } catch (error) {
-      console.error('Ошибка:', error);
-      alert('Произошла ошибка при отправке сообщения');
+      console.error('Error:', error);
+      alert('An error occurred while sending the message');
     }
   };
 
   return (
     <div className="container">
-      <h1>Отправка сообщения</h1>
+      <h1>Send Message</h1>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <textarea
             value={message.content}
             onChange={(e) => setMessage({ ...message, content: e.target.value })}
-            placeholder="Введите текст сообщения"
+            placeholder="Enter message text"
             required
           />
         </div>
-        <button type="submit">Отправить</button>
+        <button type="submit">Send</button>
       </form>
     </div>
   )
