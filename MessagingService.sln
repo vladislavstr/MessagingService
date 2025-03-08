@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Desktop", "UserInterfaces\D
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "client-sender", "UserInterfaces\client-sender\client-sender.esproj", "{8B874C49-1229-532F-F9A2-829C46A3E874}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "client-websocket", "UserInterfaces\client-websocket\client-websocket.esproj", "{577ED1BC-7188-0C8D-1FCC-F57F6197B8F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,12 @@ Global
 		{8B874C49-1229-532F-F9A2-829C46A3E874}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8B874C49-1229-532F-F9A2-829C46A3E874}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8B874C49-1229-532F-F9A2-829C46A3E874}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{577ED1BC-7188-0C8D-1FCC-F57F6197B8F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{577ED1BC-7188-0C8D-1FCC-F57F6197B8F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{577ED1BC-7188-0C8D-1FCC-F57F6197B8F7}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{577ED1BC-7188-0C8D-1FCC-F57F6197B8F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{577ED1BC-7188-0C8D-1FCC-F57F6197B8F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{577ED1BC-7188-0C8D-1FCC-F57F6197B8F7}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +64,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{05FA56CE-52D7-47A1-94FB-C95ACAFCBC9A} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{8B874C49-1229-532F-F9A2-829C46A3E874} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{577ED1BC-7188-0C8D-1FCC-F57F6197B8F7} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F2EA74F9-0556-40CE-AFC1-24D0CED690EE}
