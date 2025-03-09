@@ -50,7 +50,7 @@ try
         options.AddPolicy("AllowReactApp",
             builder =>
             {
-                builder.WithOrigins("http://localhost:5173", "http://localhost:60719")
+                builder.WithOrigins("http://localhost:5173", "http://localhost:60719", "http://localhost:60718")
                        .AllowAnyMethod()
                        .AllowAnyHeader()
                        .AllowCredentials();
