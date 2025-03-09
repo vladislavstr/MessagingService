@@ -19,6 +19,8 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "client-sender", "UserInterf
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "client-websocket", "UserInterfaces\client-websocket\client-websocket.esproj", "{577ED1BC-7188-0C8D-1FCC-F57F6197B8F7}"
 EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "client-recent-messages", "UserInterfaces\client-recent-messages\client-recent-messages.esproj", "{C36F6E8C-B354-DCB7-17D3-DFF995E2E5C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,12 @@ Global
 		{577ED1BC-7188-0C8D-1FCC-F57F6197B8F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{577ED1BC-7188-0C8D-1FCC-F57F6197B8F7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{577ED1BC-7188-0C8D-1FCC-F57F6197B8F7}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C36F6E8C-B354-DCB7-17D3-DFF995E2E5C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C36F6E8C-B354-DCB7-17D3-DFF995E2E5C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C36F6E8C-B354-DCB7-17D3-DFF995E2E5C0}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C36F6E8C-B354-DCB7-17D3-DFF995E2E5C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C36F6E8C-B354-DCB7-17D3-DFF995E2E5C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C36F6E8C-B354-DCB7-17D3-DFF995E2E5C0}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
