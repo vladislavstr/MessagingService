@@ -7,6 +7,8 @@ interface Message {
 }
 
 function App() {
+  const [isLoading, setIsLoading] = useState(false);
+  
   const getCurrentUtcTime = () => {
     const now = new Date();
     const utcOffset = now.getTimezoneOffset();
@@ -23,6 +25,7 @@ function App() {
     e.preventDefault();
     
     try {
+      setIsLoading(true);
       console.log('Sending data:', {
         content: message.content,
         sentAt: getCurrentUtcTime()
@@ -54,6 +57,8 @@ function App() {
     } catch (error) {
       console.error('Error:', error);
       alert('An error occurred while sending the message');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -67,9 +72,12 @@ function App() {
             onChange={(e) => setMessage({ ...message, content: e.target.value })}
             placeholder="Enter message text"
             required
+            disabled={isLoading}
           />
         </div>
-        <button type="submit">Send</button>
+        <button type="submit" disabled={isLoading}>
+          {isLoading ? 'Loading...' : 'Send'}
+        </button>
       </form>
     </div>
   )
