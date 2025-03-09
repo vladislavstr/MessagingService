@@ -44,6 +44,20 @@ try
     builder.Services.AddInfrastructureConfigure();
     builder.Services.AddSignalR();
 
+    #region CORS
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy("AllowReactApp",
+            builder =>
+            {
+                builder.WithOrigins("http://localhost:60717", "http://localhost:60719", "http://localhost:60718")
+                       .AllowAnyMethod()
+                       .AllowAnyHeader()
+                       .AllowCredentials();
+            });
+    });
+    #endregion
+
     #region MediatR
     var assembly = Assembly.GetExecutingAssembly();
     builder.Services.AddMediatR
@@ -110,6 +124,8 @@ try
     #endregion
 
     app.UseHttpsRedirection();
+
+    app.UseCors("AllowReactApp");
 
     app.UseAuthorization();
 
