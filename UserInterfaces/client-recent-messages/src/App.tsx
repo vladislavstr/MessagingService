@@ -39,13 +39,13 @@ function App() {
     <div className="container">
       <h1>Recent Messages</h1>
       <button onClick={fetchMessages} className="fetch-button" disabled={isLoading}>
-        {isLoading ? 'Загрузка...' : 'Получить последние сообщения'}
+        {isLoading ? 'Loading...' : 'Get recent messages'}
       </button>
 
       <div className="messages">
-        <h2>Список сообщений</h2>
+        <h2>Messages list</h2>
         {messages.length === 0 ? (
-          <p className="no-messages">Нет сообщений</p>
+          <p className="no-messages">No messages</p>
         ) : (
           <div className="messages-list">
             {messages.map((message) => (
