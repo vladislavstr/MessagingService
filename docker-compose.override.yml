@@ -1,0 +1,26 @@
+services:
+  api:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5120
+      - ConnectionStrings__PG=Server=postgres;Port=5432;Database=TestDb;User Id=TestUser;Password=1234;SearchPath=public;Pooling=false;Timeout=300;CommandTimeout=300;
+    ports:
+      - "5120:5120"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=TestDb
+      - POSTGRES_USER=TestUser
+      - POSTGRES_PASSWORD=1234
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
