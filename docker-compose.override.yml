@@ -2,10 +2,10 @@ services:
   api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ASPNETCORE_URLS=http://+:5120
+      - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__PG=Server=postgres;Port=5432;Database=TestDb;User Id=TestUser;Password=1234;SearchPath=public;Pooling=false;Timeout=300;CommandTimeout=300;
     ports:
-      - "5120:5120"
+      - "5120:8080"
     restart: unless-stopped
     depends_on:
       - postgres

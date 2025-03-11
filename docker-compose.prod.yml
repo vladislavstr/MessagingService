@@ -4,13 +4,13 @@ services:
       - .env.prod
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://+:5120;https://+:7054
+      - ASPNETCORE_URLS=http://+:8080;https://+:8081
       - ConnectionStrings__PG=Server=postgres;Port=5432;Database=TestDb;User Id=TestUser;Password=1234;SearchPath=public;Pooling=false;Timeout=300;CommandTimeout=300;
       - ASPNETCORE_Kestrel__Certificates__Default__Password=${SSL_CERT_PASSWORD}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/.aspnet/https/aspnetapp.pfx
     ports:
-      - "5120:5120"
-      - "7054:7054"
+      - "5120:8080"
+      - "7054:8081"
     restart: unless-stopped
     depends_on:
       - postgres
