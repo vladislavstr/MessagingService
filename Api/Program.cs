@@ -84,6 +84,24 @@ try
     #region Scalar
     if (app.Environment.IsDevelopment())
     {
+        // Redirect from http://localhost:5120 to http://localhost:5120/scalar/v1
+        app.Use(async (context, next) =>
+        {
+            if (context.Request.Path == "/")
+            {
+                context.Response.Redirect("/scalar/v1");
+                return;
+            }
+
+            await next();
+        });
+
+        app.UseRouting();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+
         // Specification
         app.UseSwagger(options =>
         {
@@ -104,6 +122,23 @@ try
     #region Swagger
     else
     {
+        // Redirect from http://localhost:5120 to http://localhost:5120/scalar/v1
+        app.Use(async (context, next) =>
+            {
+                if (context.Request.Path == "/")
+                {
+                    context.Response.Redirect("/swagger");
+                    return;
+                }
+                await next();
+            });
+
+        app.UseRouting();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+
         // Specification
         app.UseSwagger(options =>
         {
