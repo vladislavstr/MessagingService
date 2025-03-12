@@ -9,6 +9,8 @@
     <Nullable>enable</Nullable>
     <IsAspireHost>true</IsAspireHost>
     <UserSecretsId>538a2289-56f1-4a0b-a444-9fb4c2eece31</UserSecretsId>
+	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+	<DockerComposeProjectPath>..\..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,11 +31,9 @@
 		<PackageJsons Include="..\..\UserInterfaces\client-sender\package.json" />
 		<PackageJsons Include="..\..\UserInterfaces\client-recent-messages\package.json" />
 	</ItemGroup>
-
-	<!-- Install npm packages if node_modules is missing -->
 	<Message Importance="high" Text="Installing npm packages for %(PackageJsons.RelativeDir)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)node_modules')" />
 	<Exec Command="npm install" WorkingDirectory="%(PackageJsons.RootDir)%(PackageJsons.Directory)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)node_modules')" />
-</Target>
+  </Target>
 
 
 </Project>
