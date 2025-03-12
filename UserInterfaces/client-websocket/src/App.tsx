@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     const connection = new signalR.HubConnectionBuilder()
-      .withUrl('https://localhost:7054/chat')
+        .withUrl('http://localhost:5120/chat')
       .withAutomaticReconnect()
       .build();
 

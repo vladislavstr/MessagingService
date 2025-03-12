@@ -31,7 +31,7 @@ function App() {
         sentAt: getCurrentUtcTime()
       });
 
-      const response = await fetch('https://localhost:7054/api/Message/create-message', {
+        const response = await fetch('http://localhost:5120/api/Message/create-message', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

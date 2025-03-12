@@ -18,7 +18,7 @@ function App() {
   const fetchMessages = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('https://localhost:7054/api/Message/list');
+        const response = await fetch('http://localhost:5120/api/Message/list');
       if (response.ok) {
         const data: ApiResponse = await response.json();
         console.log('Received data:', data);
