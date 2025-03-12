@@ -14,6 +14,8 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    builder.AddServiceDefaults();
+
     #region Configuration
     string environment = builder.Environment.EnvironmentName;
     builder.Configuration.AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true);
@@ -79,6 +81,9 @@ try
     #endregion
 
     var app = builder.Build();
+
+    app.MapDefaultEndpoints();
+    app.UseCors("AllowReactApp");
 
     #region Pipelines
     #region Scalar
@@ -159,8 +164,6 @@ try
     #endregion
 
     app.UseHttpsRedirection();
-
-    app.UseCors("AllowReactApp");
 
     app.UseAuthorization();
 
