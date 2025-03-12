@@ -23,7 +23,6 @@
     <ProjectReference Include="..\..\Api\Api.csproj" />
   </ItemGroup>
 	
-
   <!-- Install npm packages if node_modules is missing -->
   <Target Name="RestoreNpm" BeforeTargets="Build" Condition=" '$(DesignTimeBuild)' != 'true' ">
 	<ItemGroup>
@@ -34,6 +33,5 @@
 	<Message Importance="high" Text="Installing npm packages for %(PackageJsons.RelativeDir)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)node_modules')" />
 	<Exec Command="npm install" WorkingDirectory="%(PackageJsons.RootDir)%(PackageJsons.Directory)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)node_modules')" />
   </Target>
-
 
 </Project>
