@@ -5,6 +5,6 @@ services:
     image: messaging-service
     build:
       context: .
-      dockerfile: Api/Dockerfile
+      dockerfile: Dockerfile
       args:
         SSL_CERT_PASSWORD: ${SSL_CERT_PASSWORD}
