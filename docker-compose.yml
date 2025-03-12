@@ -1,10 +1,8 @@
-version: '3.8'
-
 services:
   api:
     image: messaging-service
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Api/Dockerfile
       args:
         SSL_CERT_PASSWORD: ${SSL_CERT_PASSWORD}
