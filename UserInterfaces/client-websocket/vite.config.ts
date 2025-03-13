@@ -19,13 +19,12 @@ export default defineConfig(({ command, mode }: ConfigEnv) => {
   const serverConfig = {
     host: true,
     port: port,
-    strictPort: true,
-    https: false,
+    strictPort: true
   };
 
   return {
     base: "/",
-    plugins: [react()], // basicSsl()],
+    plugins: [react()],
     preview: serverConfig,
     server: serverConfig,
   };
