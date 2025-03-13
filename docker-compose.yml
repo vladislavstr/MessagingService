@@ -6,3 +6,30 @@ services:
       dockerfile: Api/Dockerfile
       args:
         SSL_CERT_PASSWORD: ${SSL_CERT_PASSWORD}
+
+  client-sender:
+    build:
+      context: ./UserInterfaces/client-sender
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+
+  client-recent-messages:
+    build:
+      context: ./UserInterfaces/client-recent-messages
+      dockerfile: Dockerfile
+    ports:
+      - "3001:80"
+    depends_on:
+      - api
+
+  client-websocket:
+    build:
+      context: ./UserInterfaces/client-websocket
+      dockerfile: Dockerfile
+    ports:
+      - "3002:80"
+    depends_on:
+      - api
