@@ -20,8 +20,13 @@ public abstract class BaseController<TController>(ISender sender) : ControllerBa
         }
         catch (Exception ex)
         {
-            Logger.Error("Message: {Message}", ex.Message);
-            return BadRequest(ex.Message);
+            Logger.Error("Message: {Message}, StackTrace: {StackTrace}", ex.Message, ex.StackTrace);
+            return BadRequest(new 
+            { 
+                error = ex.Message,
+                details = ex.InnerException?.Message,
+                type = ex.GetType().Name
+            });
         }
     }
 }

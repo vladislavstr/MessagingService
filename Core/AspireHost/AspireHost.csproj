@@ -20,5 +20,17 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Api\Api.csproj" />
   </ItemGroup>
+	
+  <!-- Install npm packages if node_modules is missing -->
+  <Target Name="RestoreNpm" BeforeTargets="Build" 
+          Condition=" '$(DesignTimeBuild)' != 'true' AND '$(DOTNET_RUNNING_IN_CONTAINER)' != 'true' ">
+    <ItemGroup>
+      <PackageJsons Include="..\..\UserInterfaces\client-websocket\package.json" />
+      <PackageJsons Include="..\..\UserInterfaces\client-sender\package.json" />
+      <PackageJsons Include="..\..\UserInterfaces\client-recent-messages\package.json" />
+    </ItemGroup>
+    <Message Importance="high" Text="Installing npm packages for %(PackageJsons.RelativeDir)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)node_modules')" />
+    <Exec Command="npm install" WorkingDirectory="%(PackageJsons.RootDir)%(PackageJsons.Directory)" Condition="!Exists('%(PackageJsons.RootDir)%(PackageJsons.Directory)node_modules')" />
+  </Target>
 
 </Project>

@@ -14,6 +14,8 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
 
+    builder.AddServiceDefaults();
+
     #region Configuration
     string environment = builder.Environment.EnvironmentName;
     builder.Configuration.AddJsonFile($"appsettings.{environment}.json", optional: true, reloadOnChange: true);
@@ -50,7 +52,7 @@ try
         options.AddPolicy("AllowReactApp",
             builder =>
             {
-                builder.WithOrigins("http://localhost:60717", "http://localhost:60719", "http://localhost:60718")
+                builder.SetIsOriginAllowed(origin => true)
                        .AllowAnyMethod()
                        .AllowAnyHeader()
                        .AllowCredentials();
@@ -80,10 +82,31 @@ try
 
     var app = builder.Build();
 
+    app.MapDefaultEndpoints();
+    app.UseCors("AllowReactApp");
+
     #region Pipelines
     #region Scalar
     if (app.Environment.IsDevelopment())
     {
+        // Redirect from http://localhost:5120 to http://localhost:5120/scalar/v1
+        app.Use(async (context, next) =>
+        {
+            if (context.Request.Path == "/")
+            {
+                context.Response.Redirect("/scalar/v1");
+                return;
+            }
+
+            await next();
+        });
+
+        app.UseRouting();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+
         // Specification
         app.UseSwagger(options =>
         {
@@ -104,6 +127,23 @@ try
     #region Swagger
     else
     {
+        // Redirect from http://localhost:5120 to http://localhost:5120/scalar/v1
+        app.Use(async (context, next) =>
+            {
+                if (context.Request.Path == "/")
+                {
+                    context.Response.Redirect("/swagger");
+                    return;
+                }
+                await next();
+            });
+
+        app.UseRouting();
+        app.UseEndpoints(endpoints =>
+        {
+            endpoints.MapControllers();
+        });
+
         // Specification
         app.UseSwagger(options =>
         {
@@ -124,8 +164,6 @@ try
     #endregion
 
     app.UseHttpsRedirection();
-
-    app.UseCors("AllowReactApp");
 
     app.UseAuthorization();
 

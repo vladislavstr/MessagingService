@@ -6,7 +6,6 @@ WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
-
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -15,7 +14,6 @@ COPY ["Api/Api.csproj", "Api/"]
 COPY ["Application/Application.csproj", "Application/"]
 COPY ["Domain/Domain.csproj", "Domain/"]
 COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
-COPY ["Core/AspireService/AspireService.csproj", "Core/AspireService/"]
 RUN dotnet restore "./Api/Api.csproj"
 COPY . .
 WORKDIR "/src/Api"
@@ -25,7 +23,7 @@ RUN dotnet build "./Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Release
 ARG SSL_CERT_PASSWORD
-# Creating a certificate at the publish stage
+# Создаем сертификат на этапе publish
 RUN mkdir -p /app/.aspnet/https/ && \
     dotnet dev-certs https -ep /app/.aspnet/https/aspnetapp.pfx -p $SSL_CERT_PASSWORD && \
     chmod 644 /app/.aspnet/https/aspnetapp.pfx
@@ -35,13 +33,9 @@ RUN dotnet publish "./Api.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:Use
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-
-# Copying the certificate from the publish stage
+# Копируем сертификат из этапа publish
 COPY --from=publish /app/.aspnet/https /app/.aspnet/https
-
-# Set permissions and switch to non-root user
-RUN chown -R $APP_UID:$APP_UID /app && \
-    chmod -R 755 /app
+RUN chown -R $APP_UID:$APP_UID /app
 USER $APP_UID
 
 ENTRYPOINT ["dotnet", "Api.dll"]
