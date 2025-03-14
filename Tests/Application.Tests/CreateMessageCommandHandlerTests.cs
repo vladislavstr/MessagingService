@@ -48,5 +48,22 @@ namespace Application.Tests
             Assert.Equal($"The message has been sent with number: {messageEntity.Id}", result);
             _messageProviderMock.Verify(provider => provider.AddMessage(messageDto), Times.Once); 
         }
+
+        [Fact]
+        public async Task Handle_DatabaseThrowsException_ReturnsErrorMessage()
+        {
+            // Arrange
+            var request = new CreateMessageCommand { Content = "Test Content", SentAt = DateTime.UtcNow };
+
+            _dataBaseProviderMock
+                .Setup(db => db.ExecuteNonQueryAsync(It.IsAny<string>(), It.IsAny<NpgsqlParameter[]>()))
+                .ThrowsAsync(new Exception("Database error"));
+
+            // Act
+            var result = await _handler.Handle(request, CancellationToken.None);
+
+            // Assert
+            Assert.Equal("Something wrong.", result);
+        }
     }
 }
