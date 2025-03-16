@@ -11,27 +11,21 @@ namespace Infrastructure.Services
 
         public async Task<T> ExecuteWithReturnAsync<T>(string sql, Func<NpgsqlDataReader, T> mapper, params NpgsqlParameter[] parameters)
         {
-            try
+
+            await using var connection = await context.GetConnectionAsync();
+
+            await using var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddRange(parameters);
+
+            await using var reader = await command.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
             {
-                await using var connection = await context.GetConnectionAsync();
-
-                await using var command = new NpgsqlCommand(sql, connection);
-                command.Parameters.AddRange(parameters);
-
-                await using var reader = await command.ExecuteReaderAsync();
-                while (await reader.ReadAsync())
-                {
-                    return mapper(reader);
-                }
-
-                _logger.Warning("Can not return data for query: {@Sql}", sql);
-                throw new InvalidOperationException("Invalid operation");
+                return mapper(reader);
             }
-            catch (Exception ex)
-            {
-                _logger.Error(ex, "Failed to execute query: {@Sql} with parameters: {@Parameters}", sql, parameters);
-                throw;
-            }
+
+            _logger.Warning("Can not return data for query: {@Sql}", sql);
+            throw new InvalidOperationException("Invalid operation");
+
         }
 
         public async Task<IEnumerable<T>> GetData<T>(string sql, Func<NpgsqlDataReader, T> mapper, params NpgsqlParameter[] parameters)
@@ -51,7 +45,7 @@ namespace Infrastructure.Services
 
             if (results.Count == 0)
             {
-                _logger.Warning("No data found for query: {@Sql} with parameters: {@Parameters}", sql, parameters);
+                _logger.Warning("No data found for query: {@Sql}", sql);
             }
 
             return results;
