@@ -23,10 +23,7 @@ namespace Application.Handlers.Commands
             {
                 _logger.Information("Initial of message processing: {Request}", request);
 
-                MessageEntity message = await dataBaseProvider.ExecuteNonQueryAsync(
-                   "INSERT INTO messages (content, sentat ) VALUES (@content  ,@sentat) RETURNING id, content, savedat",
-                   new NpgsqlParameter("content", request.Content),
-                   new NpgsqlParameter("sentat", request.SentAt));
+                MessageEntity message = await dataBaseProvider.SaveMessageAsync(request.Content, request.SentAt);
 
                 await messageProvider.AddMessage(messageMapper.ToDto(message));
 

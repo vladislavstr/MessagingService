@@ -1,44 +1,37 @@
 ﻿using Application.Providers.Interfaces;
 using Domain.Entities;
-using Microsoft.Extensions.Configuration;
+using Infrastructure;
+using Infrastructure.Services;
 using Npgsql;
 using Serilog;
 
 namespace Application.Providers
 {
-    public class DataBaseProvider(IConfiguration configuration) : IDataBaseProvider
+    public class DataBaseProvider(IDatabaseService databaseService) : IDataBaseProvider
     {
         private readonly ILogger _logger = Log.ForContext<DataBaseProvider>();
-        private readonly string _connectionString = configuration.GetSection("ConnectionStrings:PG").Value;
 
         /// <summary>
-        /// Go to db
+        /// Save message 
         /// </summary>
-        /// <param name="sql"></param>
-        /// <param name="parameters"></param>
-        /// <returns>Message value</returns>
-        //ToDo: go to generic 
-        public async Task<MessageEntity> ExecuteNonQueryAsync(string sql, params NpgsqlParameter[] parameters)
+        /// <param name="content"></param>
+        /// <param name="sentAt"></param>
+        /// <returns></returns>
+        public async Task<MessageEntity> SaveMessageAsync(string content, DateTimeOffset sentAt)
         {
-            await using var connection = new NpgsqlConnection(_connectionString);
-            await connection.OpenAsync();
+            var parameters = new NpgsqlParameter[]
+                           {
+                                new NpgsqlParameter("Content", content),
+                                new NpgsqlParameter("SentAtt", sentAt)
+                           };
 
-            await using var command = new NpgsqlCommand(sql, connection);
-            command.Parameters.AddRange(parameters);
-
-            var reader = await command.ExecuteReaderAsync();
-            if (await reader.ReadAsync())
+            return await databaseService.ExecuteWithReturnAsync(CmdText.SaveMessage, reader => new MessageEntity
             {
-                return new MessageEntity
-                {
-                    Id = reader.GetInt32(0),
-                    Content = reader.GetString(1),
-                    SavedAt = reader.GetDateTime(2)
-                };
-            }
+                Id = reader.GetInt32(0),
+                Content = reader.GetString(1),
+                SavedAt = reader.GetDateTime(2)
+            }, parameters);
 
-            _logger.Error("Error saving the message with sql: {Sql}\n parameters: {Parameters}", sql, parameters);
-            throw new Exception("Try again later");
         }
 
         /// <summary>
@@ -47,27 +40,14 @@ namespace Application.Providers
         /// <returns></returns>
         public async Task<IEnumerable<MessageEntity>> GetMessagesAsync()
         {
-            await using var connection = new NpgsqlConnection(_connectionString);
-            await connection.OpenAsync();
 
-            var messages = new List<MessageEntity>();
-
-            const string sql = "SELECT id, content, savedat FROM messages WHERE savedat >= NOW() - INTERVAL '10 minutes'";
-            await using var command = new NpgsqlCommand(sql, connection);
-
-            await using var reader = await command.ExecuteReaderAsync();
-            while (await reader.ReadAsync())
+            return await databaseService.GetData(CmdText.GetMessages, reader => new MessageEntity
             {
-                messages.Add(new MessageEntity
-                {
-                    Id = reader.GetInt32(0),
-                    Content = reader.GetString(1),
-                    SavedAt = reader.GetDateTime(2)
-                });
-            }
+                Id = reader.GetInt32(0),
+                Content = reader.GetString(1),
+                SavedAt = reader.GetDateTime(2)
+            });
 
-            _logger.Error("Error saving the message with sql: {Sql}", sql);
-            return messages;
         }
     }
 }

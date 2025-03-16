@@ -5,7 +5,7 @@ namespace Application.Providers.Interfaces
 {
     public interface IDataBaseProvider
     {
-        Task<MessageEntity> ExecuteNonQueryAsync(string sql, params NpgsqlParameter[] parameters);
+        Task<MessageEntity> SaveMessageAsync(string content, DateTimeOffset sentAt);
 
         Task<IEnumerable<MessageEntity>> GetMessagesAsync();
     }
