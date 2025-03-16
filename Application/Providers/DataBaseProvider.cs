@@ -3,14 +3,11 @@ using Domain.Entities;
 using Infrastructure;
 using Infrastructure.Services;
 using Npgsql;
-using Serilog;
 
 namespace Application.Providers
 {
     public class DataBaseProvider(IDatabaseService databaseService) : IDataBaseProvider
     {
-        private readonly ILogger _logger = Log.ForContext<DataBaseProvider>();
-
         /// <summary>
         /// Save message 
         /// </summary>
@@ -22,7 +19,7 @@ namespace Application.Providers
             var parameters = new NpgsqlParameter[]
                            {
                                 new NpgsqlParameter("Content", content),
-                                new NpgsqlParameter("SentAtt", sentAt)
+                                new NpgsqlParameter("SentAt", sentAt)
                            };
 
             return await databaseService.ExecuteWithReturnAsync(CmdText.SaveMessage, reader => new MessageEntity
@@ -31,7 +28,6 @@ namespace Application.Providers
                 Content = reader.GetString(1),
                 SavedAt = reader.GetDateTime(2)
             }, parameters);
-
         }
 
         /// <summary>
@@ -40,14 +36,12 @@ namespace Application.Providers
         /// <returns></returns>
         public async Task<IEnumerable<MessageEntity>> GetMessagesAsync()
         {
-
             return await databaseService.GetData(CmdText.GetMessages, reader => new MessageEntity
             {
                 Id = reader.GetInt32(0),
                 Content = reader.GetString(1),
                 SavedAt = reader.GetDateTime(2)
             });
-
         }
     }
 }
