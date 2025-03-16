@@ -2,9 +2,9 @@
 
 namespace Domain.Models.Handlers.Commands.Message.Validators
 {
-    public class CreateMessageCommandValidator : AbstractValidator<CreateMessageCommand>
+    public class SaveAndSendMessageCommandValidator : AbstractValidator<SaveAndSendMessageCommand>
     {
-        public CreateMessageCommandValidator()
+        public SaveAndSendMessageCommandValidator()
         {
             RuleFor(command => command.Content)
                 .NotNull()

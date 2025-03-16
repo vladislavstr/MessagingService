@@ -11,18 +11,18 @@ namespace Api.Controllers
     public class MessageController(ISender sender) : BaseController<MessageController>(sender)
     {
         /// <summary>
-        /// Create of message - add to data base
+        /// Save message to database and send in WebSocket
         /// </summary>
-        /// <param name="createMessageCommand"></param>
+        /// <param name="saveAndSendMessageCommand"></param>
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpPost]
-        [Route("create-message")]
-        public async Task<IActionResult> CreateMessage
+        [Route("save")]
+        public async Task<IActionResult> SaveAndSendMessage
             (
-                CreateMessageCommand createMessageCommand,
+                SaveAndSendMessageCommand saveAndSendMessageCommand,
                 CancellationToken cancellationToken = default
-            ) => await Action(createMessageCommand, cancellationToken);
+            ) => await Action(saveAndSendMessageCommand, cancellationToken);
 
         /// <summary>
         /// Get messages for last 10 minutes
