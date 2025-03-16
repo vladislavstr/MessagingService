@@ -7,8 +7,8 @@ namespace Api.Configures
     {
         public static IServiceCollection AddApplicationConfigure(this IServiceCollection services)
         {
-            services.AddSingleton<IMessageProvider, MessageProvider>();
-            services.AddSingleton<IDataBaseProvider, DataBaseProvider>();
+            services.AddScoped<IMessageProvider, MessageProvider>();
+            services.AddScoped<IDataBaseProvider, DataBaseProvider>();
 
             return services;
         }
