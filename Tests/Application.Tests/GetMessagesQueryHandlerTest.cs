@@ -10,16 +10,15 @@ namespace Application.Tests
 {
     public class GetMessagesQueryHandlerTest
     {
-        private Mock<IMessageMapper> _messageMapperMock;
-        private Mock<IDataBaseProvider> _dataBaseProviderMock;
-        private GetMessagesQueryHandler _handler;
+        private readonly Mock<IMessageMapper> _messageMapperMock;
+        private readonly Mock<IDataBaseProvider> _dataBaseProviderMock;
+        private readonly GetMessagesQueryHandler _handler;
 
         public GetMessagesQueryHandlerTest()
         {
             _messageMapperMock = new Mock<IMessageMapper>();
             _dataBaseProviderMock = new Mock<IDataBaseProvider>();
             _handler = new GetMessagesQueryHandler(_messageMapperMock.Object, _dataBaseProviderMock.Object);
-
         }
 
         [Fact]
@@ -55,7 +54,7 @@ namespace Application.Tests
         }
 
         [Fact]
-        public async Task Handle_DatabaseThrowsException_ThrowsException()
+        public async Task Handle_DatabaseThrowsException_ThrowsExceptionWithCorrectMessage()
         {
             // Arrange
             var request = new GetMessageQuery();
@@ -65,7 +64,71 @@ namespace Application.Tests
                 .ThrowsAsync(new Exception("Database error"));
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(() => _handler.Handle(request, CancellationToken.None));
+            var exception = await Assert.ThrowsAsync<Exception>(() => _handler.Handle(request, CancellationToken.None));
+            Assert.Equal("Something wrong.", exception.Message);
+        }
+
+        //[Fact]
+        //public async Task Handle_CancellationToken_IsPassedCorrectly()
+        //{
+        //    // Arrange
+        //    var request = new GetMessageQuery();
+        //    var messages = new List<MessageEntity>
+        //    {
+        //        new MessageEntity { Id = 1, Content = "Message 1", SavedAt = DateTime.UtcNow },
+        //        new MessageEntity { Id = 2, Content = "Message 2", SavedAt = DateTime.UtcNow }
+        //    };
+        //            var messageDtos = new List<MessageDto>
+        //    {
+        //        new MessageDto { Id = messages[0].Id, Content = messages[0].Content, SavedAt = messages[0].SavedAt },
+        //        new MessageDto { Id = messages[1].Id, Content = messages[1].Content, SavedAt = messages[1].SavedAt }
+        //    };
+
+        //    var cancellationToken = new CancellationToken(true); // Используем отмененный токен
+
+        //    _dataBaseProviderMock
+        //        .Setup(db => db.GetMessagesAsync(It.IsAny<CancellationToken>()))
+        //        .ReturnsAsync(messages);
+
+        //    _messageMapperMock
+        //        .Setup(mapper => mapper.ToDto(It.IsAny<IEnumerable<MessageEntity>>(), It.IsAny<CancellationToken>()))
+        //        .Returns(messageDtos);
+
+        //    // Act & Assert
+        //    await Assert.ThrowsAsync<TaskCanceledException>(() => _handler.Handle(request, cancellationToken));
+        //}
+
+        [Fact]
+        public async Task Handle_ValidRequest_CallsToDtoWithCorrectArguments()
+        {
+            // Arrange
+            var request = new GetMessageQuery();
+            var messages = new List<MessageEntity>
+            {
+                new MessageEntity { Id = 1, Content = "Message 1", SavedAt = DateTime.UtcNow },
+                new MessageEntity { Id = 2, Content = "Message 2", SavedAt = DateTime.UtcNow }
+            };
+            var messageDtos = new List<MessageDto>
+            {
+                new MessageDto { Id = messages[0].Id, Content = messages[0].Content, SavedAt = messages[0].SavedAt },
+                new MessageDto { Id = messages[1].Id, Content = messages[1].Content, SavedAt = messages[1].SavedAt }
+            };
+
+            _dataBaseProviderMock
+                .Setup(db => db.GetMessagesAsync())
+                .ReturnsAsync(messages);
+
+            _messageMapperMock
+                .Setup(mapper => mapper.ToDto(It.IsAny<IEnumerable<MessageEntity>>()))
+                .Returns(messageDtos);
+
+            // Act
+            await _handler.Handle(request, CancellationToken.None);
+
+            // Assert
+            _messageMapperMock.Verify(
+                mapper => mapper.ToDto(It.Is<IEnumerable<MessageEntity>>(x => x.SequenceEqual(messages))),
+                Times.Once);
         }
     }
 }
