@@ -13,7 +13,7 @@
                                                 WHERE table_schema = 'public' 
                                                 AND table_name = @tableName);";
 
-        public static string SaveMessage = @"INSERT INTO messages (Content, SentAt) VALUES (@Content, @SentAt) RETURNING id, content, SavedAt";
+        public static string SaveMessage = @"INSERT INTO messages (Content, SentAt) VALUES (@Content, @SentAt) RETURNING id, Content, SavedAt";
 
         public static string GetMessages = @"SELECT Id, Content, SentAt FROM messages WHERE SentAt >= NOW() - INTERVAL '10 minutes'";
     }

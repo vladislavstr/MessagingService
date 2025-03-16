@@ -15,9 +15,11 @@ namespace Infrastructure.Contexts
             {
                 _connection = new NpgsqlConnection(connectionString);
                 await _connection.OpenAsync();
-                _logger.Information("Database connection opened.");
+                _logger.Debug("Database connection opened.");
             }
-
+            else
+                _logger.Warning("Using existing database connection.");
+            
             return _connection;
         }
 
@@ -40,7 +42,6 @@ namespace Infrastructure.Contexts
         {
             try
             {
-                //await using var connection = await GetConnectionAsync();
                 await using var connection = await GetConnectionAsync();
                 _logger.Information("Database connection {@Connection} successful.", connection);
             }
@@ -54,14 +55,7 @@ namespace Infrastructure.Contexts
         private async Task<bool> TableExistsAsync(string tableName)
         {
             await using var connection = await GetConnectionAsync();
-            var sql = @"
-                SELECT EXISTS (
-                    SELECT FROM information_schema.tables 
-                    WHERE table_schema = 'public' 
-                    AND table_name = @tableName
-                );";
-
-            await using var command = new NpgsqlCommand(sql, connection);
+            await using var command = new NpgsqlCommand(CmdText.CheckTableExist, connection);
             command.Parameters.AddWithValue("@tableName", tableName);
 
             var result = await command.ExecuteScalarAsync();
@@ -73,6 +67,7 @@ namespace Infrastructure.Contexts
             await using var connection = _connection;
             await using var command = new NpgsqlCommand(CmdText.CreateTable, connection);
             await command.ExecuteNonQueryAsync();
+
             _logger.Information("Table 'messages' created successfully.");
         }
 

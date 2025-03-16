@@ -1,20 +1,19 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Infrastructure.Contexts;
+using Microsoft.Extensions.Configuration;
 using Npgsql;
 using Serilog;
 
 namespace Infrastructure.Services
 {
-    public class DatabaseService(IConfiguration configuration) : IDatabaseService
+    public class DatabaseService(IConfiguration configuration, MessageContext context) : IDatabaseService
     {
-        private readonly string _connectionString = configuration.GetSection("ConnectionStrings:PG").Value;
         private readonly ILogger _logger = Log.ForContext<DatabaseService>();
 
         public async Task<T> ExecuteWithReturnAsync<T>(string sql, Func<NpgsqlDataReader, T> mapper, params NpgsqlParameter[] parameters)
         {
             try
             {
-                await using var connection = new NpgsqlConnection(_connectionString);
-                await connection.OpenAsync();
+                await using var connection = await context.GetConnectionAsync();
 
                 await using var command = new NpgsqlCommand(sql, connection);
                 command.Parameters.AddRange(parameters);
@@ -25,8 +24,8 @@ namespace Infrastructure.Services
                     return mapper(reader);
                 }
 
-                _logger.Warning("No data found for query: {@Sql}", sql);
-                throw new InvalidOperationException("No data found.");
+                _logger.Warning("Can not return data for query: {@Sql}", sql);
+                throw new InvalidOperationException("Invalid operation");
             }
             catch (Exception ex)
             {
@@ -37,8 +36,7 @@ namespace Infrastructure.Services
 
         public async Task<IEnumerable<T>> GetData<T>(string sql, Func<NpgsqlDataReader, T> mapper, params NpgsqlParameter[] parameters)
         {
-            await using var connection = new NpgsqlConnection(_connectionString);
-            await connection.OpenAsync();
+            await using var connection = await context.GetConnectionAsync();
 
             await using var command = new NpgsqlCommand(sql, connection);
             command.Parameters.AddRange(parameters);
