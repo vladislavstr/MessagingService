@@ -4,6 +4,6 @@ namespace Application.Providers.Interfaces
 {
     public interface IMessageProvider
     {
-        Task AddMessage(MessageDto message, bool isContinuation = false);
+        Task AddMessage(MessageDto message);
     }
 }

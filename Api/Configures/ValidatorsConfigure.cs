@@ -8,7 +8,7 @@ namespace Api.Configures
     {
         public static IServiceCollection AddValidatorsConfigure(this IServiceCollection services)
         {
-            services.AddScoped<IValidator<CreateMessageCommand>, CreateMessageCommandValidator>();
+            services.AddScoped<IValidator<SaveAndSendMessageCommand>, SaveAndSendMessageCommandValidator>();
 
             return services;
         }

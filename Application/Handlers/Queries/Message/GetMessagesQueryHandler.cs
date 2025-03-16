@@ -30,7 +30,6 @@ namespace Application.Handlers.Queries.Message
             }
             catch (Exception ex)
             {
-                _logger.Error(ex, "{@message}", ex.Message);
                 throw new Exception("Something wrong.");
             }
         }

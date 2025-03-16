@@ -9,7 +9,7 @@ namespace Application.Providers
     public class MessageProvider(IMediator mediator) : IMessageProvider
     {
         private readonly ILogger _logger = Log.ForContext<MessageProvider>();
-        public async Task AddMessage(MessageDto message, bool isContinuation = false)
+        public async Task AddMessage(MessageDto message)
         {
             try
             {
