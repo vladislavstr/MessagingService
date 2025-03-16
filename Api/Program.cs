@@ -41,9 +41,10 @@ try
     });
 
     #region Configures
+    builder.AddInfrastructureConfigure();
+    builder.Services.AddApplicationConfigure();
     builder.Services.AddMapperConfigure();
     builder.Services.AddValidatorsConfigure();
-    builder.Services.AddInfrastructureConfigure();
     builder.Services.AddSignalR();
 
     #region CORS
