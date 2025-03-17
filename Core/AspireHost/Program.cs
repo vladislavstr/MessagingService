@@ -2,10 +2,13 @@ var builder = DistributedApplication.CreateBuilder(args);
 
 Console.WriteLine(builder.Environment.ToString());
 
+var initScriptPath = Path.GetFullPath("../../Infrastructure/init.sql");
+
 const string scheme = "http";
 
 var seq = builder.AddContainer("seq", "datalust/seq")
     .WithEnvironment("ACCEPT_EULA", "Y")
+    //.WithRemoveOnShutdown()
     .WithVolume("seq-data", "/data")
         .WithEndpoint(
         port: 5341,
@@ -18,7 +21,8 @@ var postgres = builder.AddContainer("postgres", "postgres:17")
     .WithEnvironment("POSTGRES_USER", "TestUser")
     .WithEnvironment("POSTGRES_PASSWORD", "1234")
     .WithEnvironment("POSTGRES_DB", "TestDb")
-    .WithVolume("postgres-data", "/var/lib/postgresql/data") 
+    .WithVolume("postgres-data", "/var/lib/postgresql/data")
+    .WithBindMount(initScriptPath, "/docker-entrypoint-initdb.d/init.sql")
     .WithEndpoint(port: 5432, targetPort: 5432, name: "postgres-endpoint") 
     .WaitFor(seq); 
 
