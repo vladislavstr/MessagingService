@@ -15,6 +15,6 @@
 
         public static string SaveMessage = @"INSERT INTO messages (Content, SentAt) VALUES (@Content, @SentAt) RETURNING id, Content, SavedAt";
 
-        public static string GetMessages = @"SELECT Id, Content, SentAt FROM messages WHERE SentAt >= (NOW() AT TIME ZONE 'UTC') - INTERVAL '10 minutes';";
+        public static string GetMessages = @"SELECT Id, Content, SavedAt FROM messages WHERE SavedAt >= (NOW() AT TIME ZONE 'UTC') - INTERVAL '10 minutes';";
     }
 }

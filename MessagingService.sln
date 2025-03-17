@@ -23,9 +23,9 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "client-recent-messages", "U
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Devtools", "Devtools", "{E7A56013-6188-4D22-84B0-1CE04076E094}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireHost", "Core\AspireHost\AspireHost.csproj", "{B223748E-52D4-43D5-8B55-408B88C83775}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireHost", "Devtools\AspireHost\AspireHost.csproj", "{B223748E-52D4-43D5-8B55-408B88C83775}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireService", "Core\AspireService\AspireService.csproj", "{26473489-8828-6BB6-B5DE-B9C603EEEF9C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireService", "Devtools\AspireService\AspireService.csproj", "{26473489-8828-6BB6-B5DE-B9C603EEEF9C}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
 EndProject
