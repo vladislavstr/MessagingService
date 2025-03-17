@@ -8,7 +8,6 @@ const string scheme = "http";
 
 var seq = builder.AddContainer("seq", "datalust/seq")
     .WithEnvironment("ACCEPT_EULA", "Y")
-    //.WithRemoveOnShutdown()
     .WithVolume("seq-data", "/data")
         .WithEndpoint(
         port: 5341,
