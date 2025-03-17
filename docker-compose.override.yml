@@ -4,6 +4,7 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__PG=Server=postgres;Port=5432;Database=TestDb;User Id=TestUser;Password=1234;SearchPath=public;Pooling=false;Timeout=300;CommandTimeout=300;
+      - Serilog__WriteTo__2__Args__serverUrl=http://seq:80
     ports:
       - "5120:8080"
     restart: unless-stopped
@@ -11,7 +12,7 @@ services:
       - postgres
 
   postgres:
-    image: postgres:15
+    image: postgres:17
     environment:
       - POSTGRES_DB=TestDb
       - POSTGRES_USER=TestUser
@@ -20,6 +21,7 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./Infrastructure/init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
 
   seq:

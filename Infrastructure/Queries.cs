@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure
 {
-    public class CmdText
+    public class Queries
     {
         public static string CreateTable = @"CREATE TABLE IF NOT EXISTS public.messages (
                                               Id SERIAL PRIMARY KEY,
@@ -15,6 +15,6 @@
 
         public static string SaveMessage = @"INSERT INTO messages (Content, SentAt) VALUES (@Content, @SentAt) RETURNING id, Content, SavedAt";
 
-        public static string GetMessages = @"SELECT Id, Content, SentAt FROM messages WHERE SentAt >= NOW() - INTERVAL '10 minutes'";
+        public static string GetMessages = @"SELECT Id, Content, SentAt FROM messages WHERE SentAt >= (NOW() AT TIME ZONE 'UTC') - INTERVAL '10 minutes';";
     }
 }

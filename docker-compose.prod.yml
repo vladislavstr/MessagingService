@@ -8,6 +8,7 @@ services:
       - ConnectionStrings__PG=Server=postgres;Port=5432;Database=TestDb;User Id=TestUser;Password=1234;SearchPath=public;Pooling=false;Timeout=300;CommandTimeout=300;
       - ASPNETCORE_Kestrel__Certificates__Default__Password=${SSL_CERT_PASSWORD}
       - ASPNETCORE_Kestrel__Certificates__Default__Path=/app/.aspnet/https/aspnetapp.pfx
+      - Serilog__WriteTo__2__Args__serverUrl=http://seq:80
     ports:
       - "5120:8080"
       - "7054:8081"
@@ -26,6 +27,7 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+      - ./Infrastructure/init.sql:/docker-entrypoint-initdb.d/init.sql
     restart: unless-stopped
 
   seq:

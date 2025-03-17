@@ -12,6 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspire.Hosting" Version="9.1.0" />
     <PackageReference Include="Aspire.Hosting.AppHost" Version="9.1.0" />
     <PackageReference Include="Aspire.Hosting.NodeJs" Version="9.1.0" />
     <PackageReference Include="Aspire.Hosting.Seq" Version="9.0.0" />
@@ -22,8 +23,7 @@
   </ItemGroup>
 	
   <!-- Install npm packages if node_modules is missing -->
-  <Target Name="RestoreNpm" BeforeTargets="Build" 
-          Condition=" '$(DesignTimeBuild)' != 'true' AND '$(DOTNET_RUNNING_IN_CONTAINER)' != 'true' ">
+  <Target Name="RestoreNpm" BeforeTargets="Build" Condition=" '$(DesignTimeBuild)' != 'true' AND '$(DOTNET_RUNNING_IN_CONTAINER)' != 'true' ">
     <ItemGroup>
       <PackageJsons Include="..\..\UserInterfaces\client-websocket\package.json" />
       <PackageJsons Include="..\..\UserInterfaces\client-sender\package.json" />

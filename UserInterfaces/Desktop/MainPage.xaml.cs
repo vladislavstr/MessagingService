@@ -52,7 +52,7 @@ namespace Desktop
 
         private HubConnection GetHubConnection()
         {
-            string url = "https://localhost:7054/chat";
+            string url = "http://localhost:5120/chat";
 
             HubConnection result = new HubConnectionBuilder()
                 .WithUrl(url)

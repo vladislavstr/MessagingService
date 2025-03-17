@@ -7,8 +7,11 @@ namespace Infrastructure.Contexts
     {
         private readonly ILogger _logger = Log.ForContext<MessageContext>();
         private NpgsqlConnection _connection = new NpgsqlConnection();
-
-
+        
+        /// <summary>
+        /// Get connection to database
+        /// </summary>
+        /// <returns></returns>
         public async Task<NpgsqlConnection> GetConnectionAsync()
         {
             if (_connection == null || _connection.State != System.Data.ConnectionState.Open)
@@ -23,6 +26,10 @@ namespace Infrastructure.Contexts
             return _connection;
         }
 
+        /// <summary>
+        /// Check connection with database and accessibility table of messages 
+        /// </summary>
+        /// <returns></returns>
         public async Task InitializeDatabaseAsync()
         {
             _logger.Information("Initializing database with connection string: {@ConnectionString}", connectionString);
@@ -55,7 +62,7 @@ namespace Infrastructure.Contexts
         private async Task<bool> TableExistsAsync(string tableName)
         {
             await using var connection = await GetConnectionAsync();
-            await using var command = new NpgsqlCommand(CmdText.CheckTableExist, connection);
+            await using var command = new NpgsqlCommand(Queries.CheckTableExist, connection);
             command.Parameters.AddWithValue("@tableName", tableName);
 
             var result = await command.ExecuteScalarAsync();
@@ -64,8 +71,8 @@ namespace Infrastructure.Contexts
 
         private async Task CreateMessagesTableAsync()
         {
-            await using var connection = _connection;
-            await using var command = new NpgsqlCommand(CmdText.CreateTable, connection);
+            await using var connection = await GetConnectionAsync();
+            await using var command = new NpgsqlCommand(Queries.CreateTable, connection);
             await command.ExecuteNonQueryAsync();
 
             _logger.Information("Table 'messages' created successfully.");

@@ -21,7 +21,7 @@ Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "client-websocket", "UserInt
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "client-recent-messages", "UserInterfaces\client-recent-messages\client-recent-messages.esproj", "{C36F6E8C-B354-DCB7-17D3-DFF995E2E5C0}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{E7A56013-6188-4D22-84B0-1CE04076E094}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Devtools", "Devtools", "{E7A56013-6188-4D22-84B0-1CE04076E094}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspireHost", "Core\AspireHost\AspireHost.csproj", "{B223748E-52D4-43D5-8B55-408B88C83775}"
 EndProject

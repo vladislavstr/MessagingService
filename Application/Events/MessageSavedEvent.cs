@@ -3,11 +3,11 @@ using MediatR;
 
 namespace Application.Events
 {
-    public class MessageCreatedEvent : INotification
+    public class MessageSavedEvent : INotification
     {
         public MessageDto Message { get; }
 
-        public MessageCreatedEvent(MessageDto message)
+        public MessageSavedEvent(MessageDto message)
         {
             Message = message;
         }
