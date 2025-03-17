@@ -62,7 +62,7 @@ namespace Infrastructure.Contexts
         private async Task<bool> TableExistsAsync(string tableName)
         {
             await using var connection = await GetConnectionAsync();
-            await using var command = new NpgsqlCommand(CmdText.CheckTableExist, connection);
+            await using var command = new NpgsqlCommand(Querys.CheckTableExist, connection);
             command.Parameters.AddWithValue("@tableName", tableName);
 
             var result = await command.ExecuteScalarAsync();
@@ -72,7 +72,7 @@ namespace Infrastructure.Contexts
         private async Task CreateMessagesTableAsync()
         {
             await using var connection = await GetConnectionAsync();
-            await using var command = new NpgsqlCommand(CmdText.CreateTable, connection);
+            await using var command = new NpgsqlCommand(Querys.CreateTable, connection);
             await command.ExecuteNonQueryAsync();
 
             _logger.Information("Table 'messages' created successfully.");

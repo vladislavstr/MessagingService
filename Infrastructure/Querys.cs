@@ -1,6 +1,6 @@
 ﻿namespace Infrastructure
 {
-    public class CmdText
+    public class Querys
     {
         public static string CreateTable = @"CREATE TABLE IF NOT EXISTS public.messages (
                                               Id SERIAL PRIMARY KEY,

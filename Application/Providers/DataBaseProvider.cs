@@ -22,7 +22,7 @@ namespace Application.Providers
                                 new NpgsqlParameter("SentAt", sentAt)
                            };
 
-            return await databaseService.ExecuteWithReturnAsync(CmdText.SaveMessage, reader => new MessageEntity
+            return await databaseService.ExecuteWithReturnAsync(Querys.SaveMessage, reader => new MessageEntity
             {
                 Id = reader.GetInt32(0),
                 Content = reader.GetString(1),
@@ -36,7 +36,7 @@ namespace Application.Providers
         /// <returns></returns>
         public async Task<IEnumerable<MessageEntity>> GetMessagesAsync()
         {
-            return await databaseService.GetData(CmdText.GetMessages, reader => new MessageEntity
+            return await databaseService.GetData(Querys.GetMessages, reader => new MessageEntity
             {
                 Id = reader.GetInt32(0),
                 Content = reader.GetString(1),
