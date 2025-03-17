@@ -9,9 +9,9 @@ namespace Application.Handlers.Commands
 {
     public class SaveAndSendMessageCommandHandler
         (
-            IMessageProvider messageProvider,
+            IEventProvider messageProvider,
             IMessageMapper messageMapper,
-            IDataBaseProvider dataBaseProvider
+            IMessageProvider dataBaseProvider
         ) : BaseCommandHandler<SaveAndSendMessageCommand, string>
     {
         private readonly ILogger _logger = Log.ForContext<SaveAndSendMessageCommandHandler>();
@@ -24,7 +24,7 @@ namespace Application.Handlers.Commands
 
                 MessageEntity message = await dataBaseProvider.SaveMessageAsync(request.Content, request.SentAt);
 
-                await messageProvider.AddMessage(messageMapper.ToDto(message));
+                await messageProvider.SendMessage(messageMapper.ToDto(message));
 
                 return $"The message has been sent with number: {message.Id}";
             }

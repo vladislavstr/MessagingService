@@ -1,9 +1,12 @@
-﻿using Domain.Dtos;
+﻿using Domain.Entities;
+using Npgsql;
 
 namespace Application.Providers.Interfaces
 {
     public interface IMessageProvider
     {
-        Task AddMessage(MessageDto message);
+        Task<MessageEntity> SaveMessageAsync(string content, DateTimeOffset sentAt);
+
+        Task<IEnumerable<MessageEntity>> GetMessagesAsync();
     }
 }

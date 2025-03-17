@@ -12,7 +12,7 @@ namespace Application.Handlers.Queries.Message
     public class GetMessagesQueryHandler
         (
             IMessageMapper messageMapper,
-            IDataBaseProvider dataBaseProvider
+            IMessageProvider dataBaseProvider
         ) : BaseQueryHandler<GetMessageQuery, MessagesResponse>
     {
         private readonly ILogger _logger = Log.ForContext<GetMessagesQueryHandler>();

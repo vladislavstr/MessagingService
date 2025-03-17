@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.SignalR;
 
 namespace Api.EventHandlers
 {
-    public class MessageCreatedEventHandler(IHubContext<MessageHub, IMessageClient> hubContext) : INotificationHandler<MessageCreatedEvent>
+    public class MessageCreatedEventHandler(IHubContext<MessageHub, IMessageClient> hubContext) : INotificationHandler<MessageSavedEvent>
     {
-        public async Task Handle(MessageCreatedEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(MessageSavedEvent notification, CancellationToken cancellationToken)
         {
             await hubContext.Clients.All.Send(notification.Message);
         }

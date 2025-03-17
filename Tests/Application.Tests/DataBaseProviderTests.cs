@@ -9,12 +9,12 @@ namespace Application.Tests.Providers
     public class DataBaseProviderTests
     {
         private readonly Mock<IDatabaseService> _mockDatabaseService;
-        private readonly DataBaseProvider _provider;
+        private readonly MessageProvider _provider;
 
         public DataBaseProviderTests()
         {
             _mockDatabaseService = new Mock<IDatabaseService>();
-            _provider = new DataBaseProvider(_mockDatabaseService.Object);
+            _provider = new MessageProvider(_mockDatabaseService.Object);
         }
 
         [Fact]

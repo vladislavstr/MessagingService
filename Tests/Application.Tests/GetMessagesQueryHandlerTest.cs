@@ -11,14 +11,14 @@ namespace Application.Tests
     public class GetMessagesQueryHandlerTest
     {
         private readonly Mock<IMessageMapper> _messageMapperMock;
-        private readonly Mock<IDataBaseProvider> _dataBaseProviderMock;
+        private readonly Mock<IMessageProvider> _providerMock;
         private readonly GetMessagesQueryHandler _handler;
 
         public GetMessagesQueryHandlerTest()
         {
             _messageMapperMock = new Mock<IMessageMapper>();
-            _dataBaseProviderMock = new Mock<IDataBaseProvider>();
-            _handler = new GetMessagesQueryHandler(_messageMapperMock.Object, _dataBaseProviderMock.Object);
+            _providerMock = new Mock<IMessageProvider>();
+            _handler = new GetMessagesQueryHandler(_messageMapperMock.Object, _providerMock.Object);
         }
 
         [Fact]
@@ -37,7 +37,7 @@ namespace Application.Tests
                 new MessageDto { Id = messages[1].Id, Content = messages[1].Content, SavedAt = messages[1].SavedAt }
             };
 
-            _dataBaseProviderMock
+            _providerMock
                 .Setup(db => db.GetMessagesAsync())
                 .ReturnsAsync(messages);
 
@@ -59,7 +59,7 @@ namespace Application.Tests
             // Arrange
             var request = new GetMessageQuery();
 
-            _dataBaseProviderMock
+            _providerMock
                 .Setup(db => db.GetMessagesAsync())
                 .ThrowsAsync(new Exception("Database error"));
 
@@ -84,7 +84,7 @@ namespace Application.Tests
                 new MessageDto { Id = messages[1].Id, Content = messages[1].Content, SavedAt = messages[1].SavedAt }
             };
 
-            _dataBaseProviderMock
+            _providerMock
                 .Setup(db => db.GetMessagesAsync())
                 .ReturnsAsync(messages);
 

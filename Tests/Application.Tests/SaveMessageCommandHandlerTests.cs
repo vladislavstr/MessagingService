@@ -10,17 +10,17 @@ namespace Application.Tests
 {
     public class SaveMessageCommandHandlerTests
     {
-        private readonly Mock<IMessageProvider> _messageProviderMock;
+        private readonly Mock<IEventProvider> _eventProviderMock;
         private readonly Mock<IMessageMapper> _messageMapperMock;
-        private readonly Mock<IDataBaseProvider> _dataBaseProviderMock;
+        private readonly Mock<IMessageProvider> _messageProviderMock;
         private readonly SaveAndSendMessageCommandHandler _handler;
 
         public SaveMessageCommandHandlerTests()
         {
-            _messageProviderMock = new Mock<IMessageProvider>();
+            _eventProviderMock = new Mock<IEventProvider>();
             _messageMapperMock = new Mock<IMessageMapper>();
-            _dataBaseProviderMock = new Mock<IDataBaseProvider>();
-            _handler = new SaveAndSendMessageCommandHandler(_messageProviderMock.Object, _messageMapperMock.Object, _dataBaseProviderMock.Object);
+            _messageProviderMock = new Mock<IMessageProvider>();
+            _handler = new SaveAndSendMessageCommandHandler(_eventProviderMock.Object, _messageMapperMock.Object, _messageProviderMock.Object);
         }
 
         [Fact]
@@ -31,7 +31,7 @@ namespace Application.Tests
             var messageEntity = new MessageEntity { Id = 1, Content = request.Content, SavedAt = DateTime.UtcNow };
             var messageDto = new MessageDto { Id = messageEntity.Id, Content = messageEntity.Content, SavedAt = messageEntity.SavedAt };
 
-            _dataBaseProviderMock
+            _messageProviderMock
                 .Setup(db => db.SaveMessageAsync(request.Content, request.SentAt))
                 .ReturnsAsync(messageEntity);
 
@@ -44,7 +44,7 @@ namespace Application.Tests
 
             // Assert
             Assert.Equal($"The message has been sent with number: {messageEntity.Id}", result);
-            _messageProviderMock.Verify(provider => provider.AddMessage(messageDto), Times.Once);
+            _eventProviderMock.Verify(provider => provider.SendMessage(messageDto), Times.Once);
         }
 
         [Fact]
@@ -53,7 +53,7 @@ namespace Application.Tests
             // Arrange
             var request = new SaveAndSendMessageCommand { Content = "Test Content", SentAt = DateTime.UtcNow };
 
-            _dataBaseProviderMock
+            _messageProviderMock
                 .Setup(db => db.SaveMessageAsync(request.Content, request.SentAt))
                 .ThrowsAsync(new Exception("Database error"));
 
@@ -72,7 +72,7 @@ namespace Application.Tests
             var messageEntity = new MessageEntity { Id = 1, Content = request.Content, SavedAt = DateTime.UtcNow };
             var messageDto = new MessageDto { Id = messageEntity.Id, Content = messageEntity.Content, SavedAt = messageEntity.SavedAt };
 
-            _dataBaseProviderMock
+            _messageProviderMock
                 .Setup(db => db.SaveMessageAsync(request.Content, request.SentAt))
                 .ReturnsAsync(messageEntity);
 
