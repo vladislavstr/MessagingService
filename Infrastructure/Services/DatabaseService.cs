@@ -9,6 +9,15 @@ namespace Infrastructure.Services
     {
         private readonly ILogger _logger = Log.ForContext<DatabaseService>();
 
+        /// <summary>
+        /// Save data to database
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <param name="mapper"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        /// <exception cref="InvalidOperationException"></exception>
         public async Task<T> ExecuteWithReturnAsync<T>(string sql, Func<NpgsqlDataReader, T> mapper, params NpgsqlParameter[] parameters)
         {
             _logger.Information("Start {@Method} with query: {@Sql}", nameof(ExecuteWithReturnAsync), sql);
@@ -27,6 +36,14 @@ namespace Infrastructure.Services
             throw new InvalidOperationException("Invalid operation");
         }
 
+        /// <summary>
+        /// Get data from database
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <param name="mapper"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public async Task<IEnumerable<T>> GetData<T>(string sql, Func<NpgsqlDataReader, T> mapper, params NpgsqlParameter[] parameters)
         {
             _logger.Information("Start {@Method} with query: {@Sql}", nameof(GetData), sql);

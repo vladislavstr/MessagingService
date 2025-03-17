@@ -17,6 +17,11 @@ namespace Api.Configures
             return builder;
         }
 
+        /// <summary>
+        /// Testing of connection to database and table of messages
+        /// </summary>
+        /// <param name="services"></param>
+        /// <param name="connectionString"></param>
         private static void InitializeDatabase(this IServiceCollection services, string connectionString)
         {
             var serviceProvider = services.BuildServiceProvider();
@@ -27,6 +32,13 @@ namespace Api.Configures
             }
         }
 
+        /// <summary>
+        /// Checking the connection string
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="section"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         private static string TestConfiguration<T>(this T section) where T : IConfigurationSection
         {
             if (section.Value is null)

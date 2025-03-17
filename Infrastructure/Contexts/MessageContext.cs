@@ -7,8 +7,11 @@ namespace Infrastructure.Contexts
     {
         private readonly ILogger _logger = Log.ForContext<MessageContext>();
         private NpgsqlConnection _connection = new NpgsqlConnection();
-
-
+        
+        /// <summary>
+        /// Get connection to database
+        /// </summary>
+        /// <returns></returns>
         public async Task<NpgsqlConnection> GetConnectionAsync()
         {
             if (_connection == null || _connection.State != System.Data.ConnectionState.Open)
@@ -23,6 +26,10 @@ namespace Infrastructure.Contexts
             return _connection;
         }
 
+        /// <summary>
+        /// Check connection with database and accessibility table of messages 
+        /// </summary>
+        /// <returns></returns>
         public async Task InitializeDatabaseAsync()
         {
             _logger.Information("Initializing database with connection string: {@ConnectionString}", connectionString);
