@@ -64,7 +64,7 @@ namespace Infrastructure.Contexts
 
         private async Task CreateMessagesTableAsync()
         {
-            await using var connection = _connection;
+            await using var connection = await GetConnectionAsync();
             await using var command = new NpgsqlCommand(CmdText.CreateTable, connection);
             await command.ExecuteNonQueryAsync();
 
