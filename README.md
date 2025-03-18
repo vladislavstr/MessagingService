@@ -95,3 +95,31 @@ Building and running with Aspire (/Devtools/AspireHost) is only supported for th
 Оформить docker-compose файл, при запуске которого стартуют все компоненты системы
 Дизайн не важен, т.к. это задание по большей части по backend-разработке.
 Главное, чтобы сообщения отображались и их можно было прочитать. Клиентские приложения(е) - это по сути тестовые утилиты, которые должен уметь писать backend-разработчик.***
+
+
+
+
+Остановите все контейнеры:
+```bash
+docker stop $(docker ps -aq)
+```
+
+Удалите все контейнеры:
+```bash
+docker rm $(docker ps -aq)
+```
+
+Удалите все тома:
+```bash
+docker volume rm $(docker volume ls -q)
+```
+
+3. Проверка
+После удаления томов проверьте, что они действительно удалены:
+```bash
+docker volume ls
+```
+
+```bash
+openssl rand -base64 96 | tr -d '\n' | cut -c -128
+```
