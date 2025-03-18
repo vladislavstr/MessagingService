@@ -18,7 +18,7 @@ services:
       - seq
 
   postgres:
-    image: postgres:15
+    image: postgres:17
     environment:
       - POSTGRES_DB=TestDb
       - POSTGRES_USER=TestUser

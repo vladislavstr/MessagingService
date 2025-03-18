@@ -1,5 +1,65 @@
 # MessagingService
 
+## Stack
+
+- MediatR
+- Aspire
+- Scalar/Swagger
+- Serilog
+- Seq
+- Mapperly
+- Npgsql
+- React
+- MauiUI
+
+## Instructions
+1. Add .env and .env.prod files:
+  - Create .env and .env.prod files in the root of the project.
+  - Add the SSL_CERT_PASSWORD variable to both files.
+
+2. Generate SSL_CERT_PASSWORD:
+- You can generate a secure password using the following command:
+
+```bash
+openssl rand -base64 32
+```
+
+Copy the generated password and paste it into the SSL_CERT_PASSWORD variable in both .env and .env.prod files.
+
+### UI Structure
+1. \UserInterfaces\client-sender-messages:
+
+    - The first client writes a stream of arbitrary (content-wise) messages to the service (one API call per message).
+
+2. \UserInterfaces\client-websocket:
+
+    - The second client reads a stream of messages from the server via WebSocket and displays them in the order they are received (with a timestamp and sequence number).
+
+3. \UserInterfaces\client-recent:
+   - Through the third client, the user can display the message history for the last 10 minutes.
+
+**Additional Project**
+- \UserInterfaces\Desktop:
+
+This project duplicates the role of the second client as a desktop application. It is not orchestrated via Aspire or Docker Compose.
+
+## Building and Running the Project
+The project can be built and run using Docker Compose.
+
+For production configuration:
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml build
+docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+For development configuration:
+```bash
+docker-compose -f docker-compose.yml -f docker-compose.override.yml build
+docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
+```
+
+Using Aspire:
+Building and running with Aspire (/Devtools/AspireHost) is only supported for the development configuration.
+
 ## Задача - написать простой web-сервис обмена сообщениями.
 
 ### Сервис состоит из трех компонентов:
