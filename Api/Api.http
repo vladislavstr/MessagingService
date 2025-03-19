@@ -1,6 +1,15 @@
 @Api_HostAddress = http://localhost:5120
 
-GET {{Api_HostAddress}}/weatherforecast/
-Accept: application/json
+### Save and send a message
+POST {{Api_HostAddress}}/api/message/save
+Content-Type: application/json
 
+{
+  "content": "Привет, мир!",
+  "sentAt": "2023-10-01T12:00:00Z"
+}
+
+### Get a list of messages
+GET {{Api_HostAddress}}/api/message/list
+Accept: application/json
 ###
