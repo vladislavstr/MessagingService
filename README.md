@@ -60,66 +60,36 @@ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 Using Aspire:
 Building and running with Aspire (/Devtools/AspireHost) is only supported for the development configuration.
 
-## Задача - написать простой web-сервис обмена сообщениями.
+## Task - Develop a Simple Messaging Web Service.
 
-### Сервис состоит из трех компонентов:
-- Web-сервер
-- SQL БД (желательно Postgresql)
-- 3 клиента (первый пишет сообщения, второй отображает их в реальном времени, третий позволяет просмотреть список сообщений за последнюю минуту).
+### The service consists of three components:
+- Web server.
+- SQL database (preferably PostgreSQL).
+- 3 clients (the first writes messages, the second displays them in real-time, and the third allows viewing the list of messages from the last minute).
 
-Все три клиентские части можно реализовать как отдельными web-приложениями, так и одним c разделение клиентов по url (как удобнее).
-Каждое сообщение состоит из текста до 128 символов, метки даты/времени (устанавливается на сервере) и порядкового номера (приходит от клиента).
+All three client parts can be implemented as separate web applications or as a single application with clients separated by URLs (as preferred).
+Each message consists of text up to 128 characters, a timestamp (set on the server), and a sequence number (provided by the client).
 
-### Схема работы системы следующая: 
-- первый клиент пишет потоком произвольные (по контенту) сообщения в сервис (на одно сообщение один вызов к API)
-- сервис обрабатывает каждое сообщение, записывает его в базу и перенаправляет его второму клиенту по веб-сокету
-- второй клиент при считывает по веб-сокету поток сообщений от сервера и отображает их в порядке прихода с сервера (с отображением метки времени и порядкового номера)
-- через третий клиент пользователь может отобразить историю сообщений за последние 10 минут
+### The system workflow is as follows:
+- The first client writes a stream of arbitrary (content-wise) messages to the service (one API call per message).
+- The service processes each message, saves it to the database, and forwards it to the second client via WebSocket.
+- The second client reads the stream of messages from the server via WebSocket and displays them in the order they are received (with the timestamp and sequence number).
+- Through the third client, the user can display the message history for the last 10 minutes.
 
-### Серверная часть имеет REST или GraphQL (на выбор) API c 2 методами:
-- отправить одно сообщение
-- получить список сообщений за диапазон дат
+### The server-side has a REST or GraphQL (your choice) API with 2 methods:
+- Send a single message
+- Get a list of messages for a date range
 
-**Желательно:** сгенерить swagger-документацию (для REST-api).
+**Preferably:** Generate Swagger documentation (for REST API).
 
-**Перечень языков для разработки:** C# или Go
+**Development languages:** C# or Go
 
-**Архитектурные требования:**
-- MVC или подобная
+**Architectural requirements:**
+- MVC or similar
+- DAL layer without using ORM
+- Logging to understand the current state of the application (the level of detail in the logs is at your discretion, but the quality of logging is one of the evaluation criteria for the completed task)
 
-- Слой DAL без использования ORM
-
-- Ведение логов, чтобы по ним можно было понять текущее состояние работы приложения (детальность логов на свое усмотрение, при этом качество логирования является одним из критериев оценки выполненного тестового задания)
-
-***Приложение нужно оформить в виде docker-образов и выложить на github.
-Оформить docker-compose файл, при запуске которого стартуют все компоненты системы
-Дизайн не важен, т.к. это задание по большей части по backend-разработке.
-Главное, чтобы сообщения отображались и их можно было прочитать. Клиентские приложения(е) - это по сути тестовые утилиты, которые должен уметь писать backend-разработчик.***
-
-
-
-
-Остановите все контейнеры:
-```bash
-docker stop $(docker ps -aq)
-```
-
-Удалите все контейнеры:
-```bash
-docker rm $(docker ps -aq)
-```
-
-Удалите все тома:
-```bash
-docker volume rm $(docker volume ls -q)
-```
-
-3. Проверка
-После удаления томов проверьте, что они действительно удалены:
-```bash
-docker volume ls
-```
-
-```bash
-openssl rand -base64 96 | tr -d '\n' | cut -c -128
-```
+***The application should be packaged as Docker images and published on GitHub.
+Create a docker-compose file that starts all components of the system when launched.
+Design is not important, as this task is mostly about backend development.
+The main goal is to ensure that messages are displayed and can be read. The client application(s) are essentially test utilities that a backend developer should be able to write.***
